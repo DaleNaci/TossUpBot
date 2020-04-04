@@ -8,8 +8,6 @@ import asyncio
 Client = discord.Client()
 client = commands.Bot(command_prefix = "!")
 
-server = MinecraftServer.lookup("Vextossup.join-mc.net")
-status = server.status()
 
 @client.event
 async def on_ready():
@@ -17,6 +15,9 @@ async def on_ready():
 
 @client.command()
 async def p(ctx):
+    server = MinecraftServer.lookup("Vextossup.join-mc.net")
+    status = server.status()
+    
     player_count = status.players.online
     reply = str(player_count) + " players are currently online."
 
