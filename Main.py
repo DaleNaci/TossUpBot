@@ -7,8 +7,18 @@ from mcstatus import MinecraftServer
 
 import asyncio
 
+
 Client = discord.Client()
 client = commands.Bot(command_prefix = "!")
+
+
+def player_count(input):
+    index = input.find("players")
+    s = input[index:-3]
+    max_index = s.find("80")
+    count = int(s[9:max_index-1])
+
+    return count
 
 
 def player_list(input):
@@ -28,6 +38,7 @@ def player_list(input):
 async def on_ready():
     print("Bot is ready!")
 
+
 @client.command()
 async def p(ctx):
     server = MinecraftServer.lookup("Vextossup.join-mc.net")
@@ -43,8 +54,23 @@ async def p(ctx):
     await ctx.send(reply)
 
 
+@client.event
+async def update_game():
+    await client.wait_until_ready()
+
+    while True:
+        output = str(subprocess.check_output("mcstatus Vextossup.join-mc.net status",
+                     shell=True))
+
+        s = str(player_count(output)) + " players online"
+        await client.change_presence(activity=discord.Activity(type=-1, name=s))
+        await asyncio.sleep(10)
+
+
 with open("token.txt", "r") as f:
     lines = f.readlines()
     token = lines[0].strip()
+
+client.loop.create_task(update_game())
 
 client.run(token)
