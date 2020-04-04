@@ -63,7 +63,7 @@ async def update_game():
                      shell=True))
 
         s = str(player_count(output)) + " players online"
-        await client.change_presence(activity=discord.Activity(type=-1, name=s))
+        await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=s))
         await asyncio.sleep(10)
 
 
