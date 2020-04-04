@@ -1,3 +1,5 @@
+import subprocess
+
 import discord
 from discord.ext.commands import Bot
 from discord.ext import commands
@@ -9,6 +11,19 @@ Client = discord.Client()
 client = commands.Bot(command_prefix = "!")
 
 
+def player_list(input):
+    index = input.find("[")
+
+    if index == -1:
+        return []
+
+    lst_string = input[index+1:-4]
+    lst = lst_string.split(", ")
+    lst = [s.split(" ")[0][2:] for s in lst]
+
+    return lst
+
+
 @client.event
 async def on_ready():
     print("Bot is ready!")
@@ -17,9 +32,13 @@ async def on_ready():
 async def p(ctx):
     server = MinecraftServer.lookup("Vextossup.join-mc.net")
     status = server.status()
-    
     player_count = status.players.online
-    reply = str(player_count) + " players are currently online."
+
+    output = str(subprocess.check_output("mcstatus Vextossup.join-mc.net status",
+                 shell=True))
+    players_online = player_list(output)
+
+    reply = str(player_count) + " players:" + "```" + "\n" + "\n".join(players_online) + "\n" + "```"
 
     await ctx.send(reply)
 
