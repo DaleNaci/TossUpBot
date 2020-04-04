@@ -11,6 +11,8 @@ import asyncio
 Client = discord.Client()
 client = commands.Bot(command_prefix = "!")
 
+client.remove_command("help")
+
 
 def player_count(input):
     index = input.find("players")
@@ -50,6 +52,13 @@ async def p(ctx):
     players_online = player_list(output)
 
     reply = str(player_count) + " players:" + "```" + "\n" + "\n".join(players_online) + "\n" + "```"
+
+    await ctx.send(reply)
+
+
+@client.command()
+async def help(ctx):
+    reply = "```\n" + "Type !p to get a list of the current online players." + "\n```"
 
     await ctx.send(reply)
 
