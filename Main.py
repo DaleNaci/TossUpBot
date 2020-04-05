@@ -80,6 +80,6 @@ with open("token.txt", "r") as f:
     lines = f.readlines()
     token = lines[0].strip()
 
-client.loop.create_task(update_game())
+# client.loop.create_task(update_game())
 
 client.run(token)
