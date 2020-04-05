@@ -51,7 +51,12 @@ async def p(ctx):
                  shell=True))
     players_online = player_list(output)
 
-    reply = str(player_count) + " players:" + "```" + "\n" + "\n".join(players_online) + "\n" + "```"
+    if player_count == 0:
+        reply = "0 players."
+    elif player_count == 1:
+        reply = str(player_count) + " player:" + "```" + "\n" + "\n".join(players_online) + "\n" + "```"
+    else:
+        reply = str(player_count) + " players:" + "```" + "\n" + "\n".join(players_online) + "\n" + "```"
 
     await ctx.send(reply)
 
